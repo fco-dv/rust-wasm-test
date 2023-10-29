@@ -6,15 +6,13 @@
   "description": "My super awesome Rust, WebAssembly, and Webpack project!",
   "version": "0.1.0",
   "files": [
-    "index_bg.wasm",
-    "index.js",
-    "index_bg.js",
-    "index.d.ts"
+    "rust_webpack_template_bg.wasm",
+    "rust_webpack_template.js",
+    "rust_webpack_template.d.ts"
   ],
-  "module": "index.js",
-  "types": "index.d.ts",
+  "module": "rust_webpack_template.js",
+  "types": "rust_webpack_template.d.ts",
   "sideEffects": [
-    "./index.js",
     "./snippets/*"
   ]
 }
