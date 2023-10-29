@@ -26,6 +26,8 @@ function getInt32Memory0() {
     }
     return cachedInt32Memory0;
 }
+
+function notDefined(what) { return () => { throw new Error(`${what} is not defined`); }; }
 /**
 */
 export const Cell = Object.freeze({ Dead:0,"0":"Dead",Alive:1,"1":"Alive", });
@@ -83,6 +85,39 @@ export class Universe {
     tick() {
         wasm.universe_tick(this.__wbg_ptr);
     }
+    /**
+    * @returns {number}
+    */
+    width() {
+        const ret = wasm.universe_width(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+    /**
+    * @returns {number}
+    */
+    height() {
+        const ret = wasm.universe_height(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+    /**
+    * @returns {number}
+    */
+    cells() {
+        const ret = wasm.universe_cells(this.__wbg_ptr);
+        return ret;
+    }
+    /**
+    * @param {number} width
+    */
+    set_width(width) {
+        wasm.universe_set_width(this.__wbg_ptr, width);
+    }
+    /**
+    * @param {number} height
+    */
+    set_height(height) {
+        wasm.universe_set_height(this.__wbg_ptr, height);
+    }
 }
 
 async function __wbg_load(module, imports) {
@@ -119,6 +154,7 @@ async function __wbg_load(module, imports) {
 function __wbg_get_imports() {
     const imports = {};
     imports.wbg = {};
+    imports.wbg.__wbg_random_5f61cd0d6777a993 = typeof Math.random == 'function' ? Math.random : notDefined('Math.random');
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
     };

@@ -3,6 +3,7 @@ use std::fmt;
 
 use wasm_bindgen::prelude::*;
 
+extern crate js_sys;
 // #[wasm_bindgen]
 // extern "C" {
 //     fn alert(s: &str);
@@ -31,18 +32,43 @@ pub struct Universe{
 #[wasm_bindgen]
 impl Universe {
     pub fn new() -> Universe{
-        let width=64;
-        let height=64;
-         let cells: Vec<_> = (0..width*height)
-         .map(|idx| {
-            if idx%2 == 0 || idx%7 == 0 {
-                Cell::Alive
-            }else {
-                Cell::Dead
-            }
-         } )
-         .collect();
+        let width:u32=64;
+        let height: u32=64;
+        // let cells: Vec<_> = (0..width*height)
+        //  .map(|idx| {
+        //     if idx%2 == 0 || idx%7 == 0 {
+        //         Cell::Alive
+        //     }else {
+        //         Cell::Dead
+        //     }
+        //  } )
+        //  .collect();
 
+        let cells: Vec<_> = (0..width*height)
+            .map(|_| {
+                if js_sys::Math::random() < 0.5 {
+                    Cell::Alive
+                } else {
+                    Cell::Dead
+                }
+            })
+            .collect();
+        //single space ship  c/2 orthogonal
+        // can be seen as a vector of offset of row and cols
+        // defined from the top left of the space
+        let row_col_offsets = vec![(0,1),(0,4),(1,0),(2,0), (2,4),(3,0),(3,1),(3,2), (3,3) ];
+        // init cells to Dead
+        let mut cells: Vec<_> = (0..width*height)
+        .map(|_| Cell::Dead)
+        .collect();
+        let spaceship_origin_idx = (1,1);
+        for offsets in row_col_offsets.iter() {
+            let _row = offsets.0+spaceship_origin_idx.0;
+            let _col = offsets.1+spaceship_origin_idx.1;
+            let idx = (_row*width+_col) as usize;
+            cells[idx] = Cell::Alive;
+
+        }
         Universe { width: (width), height: (height), cells: (cells) }
 
     }
@@ -92,6 +118,44 @@ impl Universe {
             }
         }
         self.cells = next_cells
+    }
+
+    pub fn width(&self) -> u32 {
+        self.width
+    }
+
+    pub fn height(&self) -> u32 {
+        self.height
+    }
+
+    pub fn cells(&self) -> *const Cell{ 
+        self.cells.as_ptr()
+    }
+
+    pub fn set_width(&mut self, width:u32) {
+        self.width = width;
+        self.cells = (0..self.width*self.height).map(|_| Cell::Dead).collect()
+
+    }
+
+    pub fn set_height(&mut self, height:u32) {
+        self.height = height;
+        self.cells = (0..self.width*self.height).map(|_| Cell::Dead).collect()
+
+    }
+
+}
+
+impl Universe {
+    pub fn get_cells(&self) -> &[Cell] {
+        &self.cells
+    }
+
+    pub fn set_cells(&mut self, cells: &[(u32, u32)]) {
+        for (row, col) in cells.iter().cloned() {
+            let idx = self.get_index(row, col);
+            self.cells[idx] = Cell::Alive;
+        }
     }
 }
 
