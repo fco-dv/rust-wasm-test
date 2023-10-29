@@ -1,5 +1,5 @@
 mod utils;
-use std::fmt;
+use std::{fmt, cell};
 
 use wasm_bindgen::prelude::*;
 
@@ -144,6 +144,10 @@ impl Universe {
 
     }
 
+    pub fn toggle_cell(&mut self, row:u32, col:u32) {
+        let idx = self.get_index(row, col);
+        self.cells[idx].toggle();
+    }
 }
 
 impl Universe {
@@ -169,5 +173,14 @@ impl fmt::Display for Universe {
             write!(f, "\n")?;
         }
       Ok(())  
+    }
+}
+
+impl Cell {
+    pub fn toggle(&mut self) {
+        *self = match *self {
+            Cell::Alive => Cell::Dead,
+            Cell::Dead => Cell::Alive,
+        };
     }
 }
