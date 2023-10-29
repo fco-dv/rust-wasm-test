@@ -19,6 +19,36 @@ async function run() {
     const height = universe.height();
     
     
+    const getIndex = (row, column) => {
+      return row * width + column;
+    };
+    
+    const drawCells = () => {
+      const cellsPtr = universe.cells();
+      const cells = new Uint8Array(memory.buffer, cellsPtr, width * height);
+    
+      ctx.beginPath();
+    
+      for (let row = 0; row < height; row++) {
+        for (let col = 0; col < width; col++) {
+          const idx = getIndex(row, col);
+    
+          ctx.fillStyle = cells[idx] === Cell.Dead
+            ? DEAD_COLOR
+            : ALIVE_COLOR;
+    
+          ctx.fillRect(
+            col * (CELL_SIZE + 1) + 1,
+            row * (CELL_SIZE + 1) + 1,
+            CELL_SIZE,
+            CELL_SIZE
+          );
+        }
+      }
+    
+      ctx.stroke();
+    };
+    
     // Give the canvas room for all of our cells and a 1px border
     // around each of them.
     const canvas = document.getElementById("game-of-life-canvas");
@@ -94,36 +124,6 @@ async function run() {
       for (let j = 0; j <= height; j++) {
         ctx.moveTo(0,                           j * (CELL_SIZE + 1) + 1);
         ctx.lineTo((CELL_SIZE + 1) * width + 1, j * (CELL_SIZE + 1) + 1);
-      }
-    
-      ctx.stroke();
-    };
-    
-    const getIndex = (row, column) => {
-      return row * width + column;
-    };
-    
-    const drawCells = () => {
-      const cellsPtr = universe.cells();
-      const cells = new Uint8Array(memory.buffer, cellsPtr, width * height);
-    
-      ctx.beginPath();
-    
-      for (let row = 0; row < height; row++) {
-        for (let col = 0; col < width; col++) {
-          const idx = getIndex(row, col);
-    
-          ctx.fillStyle = cells[idx] === Cell.Dead
-            ? DEAD_COLOR
-            : ALIVE_COLOR;
-    
-          ctx.fillRect(
-            col * (CELL_SIZE + 1) + 1,
-            row * (CELL_SIZE + 1) + 1,
-            CELL_SIZE,
-            CELL_SIZE
-          );
-        }
       }
     
       ctx.stroke();
