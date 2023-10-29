@@ -2,14 +2,37 @@
 /* eslint-disable */
 /**
 */
-export function main_js(): void;
+export enum Cell {
+  Dead = 0,
+  Alive = 1,
+}
+/**
+*/
+export class Universe {
+  free(): void;
+/**
+* @returns {Universe}
+*/
+  static new(): Universe;
+/**
+* @returns {string}
+*/
+  render(): string;
+/**
+*/
+  tick(): void;
+}
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly main_js: () => void;
-  readonly __wbindgen_start: () => void;
+  readonly __wbg_universe_free: (a: number) => void;
+  readonly universe_new: () => number;
+  readonly universe_render: (a: number, b: number) => void;
+  readonly universe_tick: (a: number) => void;
+  readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
+  readonly __wbindgen_free: (a: number, b: number, c: number) => void;
 }
 
 export type SyncInitInput = BufferSource | WebAssembly.Module;
