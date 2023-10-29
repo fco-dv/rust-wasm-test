@@ -118,6 +118,13 @@ export class Universe {
     set_height(height) {
         wasm.universe_set_height(this.__wbg_ptr, height);
     }
+    /**
+    * @param {number} row
+    * @param {number} col
+    */
+    toggle_cell(row, col) {
+        wasm.universe_toggle_cell(this.__wbg_ptr, row, col);
+    }
 }
 
 async function __wbg_load(module, imports) {

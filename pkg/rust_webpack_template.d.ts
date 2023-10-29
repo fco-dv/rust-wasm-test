@@ -41,6 +41,11 @@ export class Universe {
 * @param {number} height
 */
   set_height(height: number): void;
+/**
+* @param {number} row
+* @param {number} col
+*/
+  toggle_cell(row: number, col: number): void;
 }
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -56,6 +61,7 @@ export interface InitOutput {
   readonly universe_cells: (a: number) => number;
   readonly universe_set_width: (a: number, b: number) => void;
   readonly universe_set_height: (a: number, b: number) => void;
+  readonly universe_toggle_cell: (a: number, b: number, c: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
 }
